@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzFBNEY4MiIvPgogIDxyZWN0IHg9IjEwIiB5PSIxMyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHJ4PSIxLjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHBhdGggZD0iTTEzIDEzdi0yYTEgMSAwIDAgMSAxLTFoNGExIDEgMCAwIDEgMSAxdjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGxpbmUgeDE9IjEwIiB5MT0iMTciIHgyPSIyMiIgeTI9IjE3IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4=">
+  <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzFBNEY4MiIvPgogIDxyZWN0IHg9IjEwIiB5PSIxMyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHJ4PSIxLjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHBhdGggZD0iTTEzIDEzdi0yYTEgMSAwIDAgMSAxLTFoNGExIDEgMCAwIDEgMSAxdjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGxpbmUgeDE9IjEwIiB5MT0iMTciIHgyPSIyMiIgeTI9IjE3IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4=">
+  <meta name="theme-color" content="#1A4F82">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PayTrack v4</title>
+<title>PayTrack</title>
 <style>
 :root{--bg:#f5f4f0;--surface:#fff;--s2:#f9f8f5;--bd:#e2e0d8;--bd2:#ccc9bc;--tx:#1a1a18;--tx2:#6b6a64;--tx3:#9b9a94;--acc:#1a1a18;--blue:#1a6fb5;--bluebg:#eef4fb;--green:#197a4a;--greenbg:#eaf4ee;--amber:#9a6200;--amberbg:#fdf5e0;--red:#b91c1c;--redbg:#fef2f2;--purple:#6b2fa0;--purplebg:#f5eefb;--teal:#0e7490;--tealbg:#f0fbfc;--r:8px;--rl:12px}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1474,7 +1477,10 @@ function exportCFcsv(){
 function exportCFhtml(){
   const {data,from,to}=getCFData();if(!data.length)return alert('No data');
   const total=data.reduce((a,p)=>a+Number(p.amount),0);
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cash Flow Report</title>
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzFBNEY4MiIvPgogIDxyZWN0IHg9IjEwIiB5PSIxMyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHJ4PSIxLjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHBhdGggZD0iTTEzIDEzdi0yYTEgMSAwIDAgMSAxLTFoNGExIDEgMCAwIDEgMSAxdjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGxpbmUgeDE9IjEwIiB5MT0iMTciIHgyPSIyMiIgeTI9IjE3IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4=">
+  <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzFBNEY4MiIvPgogIDxyZWN0IHg9IjEwIiB5PSIxMyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHJ4PSIxLjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHBhdGggZD0iTTEzIDEzdi0yYTEgMSAwIDAgMSAxLTFoNGExIDEgMCAwIDEgMSAxdjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGxpbmUgeDE9IjEwIiB5MT0iMTciIHgyPSIyMiIgeTI9IjE3IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4=">
+  <title>Cash Flow Report</title>
   <style>body{font-family:Arial,sans-serif;font-size:12px;padding:20px;color:#222}h2{margin-bottom:4px}table{width:100%;border-collapse:collapse;margin-top:12px}th{background:#f3f3f3;padding:6px 10px;text-align:left;border:1px solid #ddd;font-size:11px}td{padding:6px 10px;border:1px solid #eee}tfoot td{font-weight:700;background:#f9f9f9}.hdr{display:flex;justify-content:space-between;margin-bottom:16px}</style></head>
   <body><div class="hdr"><div><h2>Cash Flow Summary</h2><div>${from?fmtD(from):''} — ${to?fmtD(to):''}</div></div><div style="text-align:right"><div style="font-size:18px;font-weight:700">${fmtA(total)}</div><div style="font-size:11px;color:#888">${data.length} transactions</div></div></div>
   <table><thead><tr><th>Date</th><th>Company</th><th>Payee</th><th>Category</th><th>Amount (RM)</th><th>Reference</th></tr></thead>
@@ -1518,7 +1524,10 @@ function expCustom(){const d=getExData();if(!d.length)return alert('No data');co
 function expPrintable(){
   const d=getExData();if(!d.length)return alert('No data');
   const total=d.reduce((a,p)=>a+Number(p.amount),0);
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Payment List</title>
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzFBNEY4MiIvPgogIDxyZWN0IHg9IjEwIiB5PSIxMyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHJ4PSIxLjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHBhdGggZD0iTTEzIDEzdi0yYTEgMSAwIDAgMSAxLTFoNGExIDEgMCAwIDEgMSAxdjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGxpbmUgeDE9IjEwIiB5MT0iMTciIHgyPSIyMiIgeTI9IjE3IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4=">
+  <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzFBNEY4MiIvPgogIDxyZWN0IHg9IjEwIiB5PSIxMyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHJ4PSIxLjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHBhdGggZD0iTTEzIDEzdi0yYTEgMSAwIDAgMSAxLTFoNGExIDEgMCAwIDEgMSAxdjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGxpbmUgeDE9IjEwIiB5MT0iMTciIHgyPSIyMiIgeTI9IjE3IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4=">
+  <title>Payment List</title>
   <style>body{font-family:Arial,sans-serif;font-size:11px;padding:16px;color:#222}h2{margin-bottom:2px;font-size:16px}table{width:100%;border-collapse:collapse;margin-top:10px}th{background:#f0f0f0;padding:5px 8px;text-align:left;border:1px solid #ccc;font-size:10px}td{padding:5px 8px;border:1px solid #e5e5e5}tfoot td{font-weight:700;background:#f9f9f9}.meta{color:#888;font-size:10px;margin-bottom:12px}.status-paid{color:green}.status-overdue{color:red}.status-pending{color:#9a6200}@media print{.noprint{display:none}}</style></head>
   <body><h2>Payment List</h2><div class="meta">Generated: ${new Date().toLocaleString('en-MY')} · ${d.length} records · Total: ${fmtA(total)}</div>
   <table><thead><tr><th>#</th><th>Company</th><th>Payee</th><th>Category</th><th>Amount (RM)</th><th>Due Date</th><th>Bank</th><th>Acc No.</th><th>Status</th><th>Reference</th></tr></thead>
@@ -2121,7 +2130,10 @@ function printVoucher(title,rows,attach){
       :`<div style="margin-top:22px;padding-top:16px;border-top:1px solid #e0e0e0"><p style="font-size:11px;font-weight:600;color:#777;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📎 Supporting Document</p><div style="background:#f5f5f5;border:1px solid #e0e0e0;border-radius:6px;padding:12px 16px;display:flex;align-items:center;gap:10px"><span style="font-size:26px">📄</span><div><div style="font-weight:600">${attach.name}</div><div style="color:#888;font-size:11px;margin-top:2px">PDF attached — print separately or view in browser</div></div></div></div>`
   ):'';
 
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title>
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzFBNEY4MiIvPgogIDxyZWN0IHg9IjEwIiB5PSIxMyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHJ4PSIxLjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHBhdGggZD0iTTEzIDEzdi0yYTEgMSAwIDAgMSAxLTFoNGExIDEgMCAwIDEgMSAxdjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGxpbmUgeDE9IjEwIiB5MT0iMTciIHgyPSIyMiIgeTI9IjE3IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4=">
+  <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzFBNEY4MiIvPgogIDxyZWN0IHg9IjEwIiB5PSIxMyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHJ4PSIxLjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHBhdGggZD0iTTEzIDEzdi0yYTEgMSAwIDAgMSAxLTFoNGExIDEgMCAwIDEgMSAxdjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGxpbmUgeDE9IjEwIiB5MT0iMTciIHgyPSIyMiIgeTI9IjE3IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4=">
+  <title>${title}</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#1a1a18;padding:30px 36px;max-width:720px;margin:0 auto}
