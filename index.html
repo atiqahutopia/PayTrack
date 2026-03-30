@@ -607,8 +607,9 @@ tbody tr:hover td{background:var(--s2)}
 <!-- COMPANY -->
 <div class="mo" id="mo-company">
   <div class="md">
-    <div class="mh"><div class="mt">Add Company</div><button class="xb" onclick="closeM('company')">✕</button></div>
+    <div class="mh"><div class="mt" id="co-modal-title">Add Company</div><button class="xb" onclick="closeM('company')">✕</button></div>
     <div class="mb">
+      <input type="hidden" id="co-id">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
         <div class="fg" style="grid-column:1/-1"><label class="fl">Company Name <span class="req">*</span></label><input id="co-name" placeholder="Full registered company name"></div>
         <div class="fg"><label class="fl">Short Code (2–4 chars)</label><input id="co-code" placeholder="e.g. ABC" maxlength="4" style="text-transform:uppercase"></div>
@@ -627,7 +628,7 @@ tbody tr:hover td{background:var(--s2)}
         </div>
       </div>
     </div>
-    <div class="mf"><button class="btn" onclick="closeM('company')">Cancel</button><button class="btn btnp" onclick="saveCo()">Add Company</button></div>
+    <div class="mf"><button class="btn" onclick="closeM('company')">Cancel</button><button class="btn btnp" onclick="saveCo()" id="co-save-btn">Add Company</button></div>
   </div>
 </div>
 
@@ -1273,7 +1274,7 @@ function rCo(){
       <td style="font-size:11px;color:var(--tx2)">${c.msic||'—'}</td>
       <td style="font-size:11px;color:var(--tx2);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.email||'—'}</td>
       <td style="font-size:11px;color:var(--tx2);white-space:nowrap">${c.phone||'—'}</td>
-      <td style="white-space:nowrap"><div style="display:flex;gap:4px"><button class="btn btns" onclick="printCompanyProfile(${c.id})" title="Print PDF">🖨️</button><button class="btn btns btnd" onclick="delCo(${c.id})" title="Remove">✕</button></div></td>
+      <td style="white-space:nowrap"><div style="display:flex;gap:4px"><button class="btn btns" onclick="printCompanyProfile(${c.id})" title="Print PDF">🖨️</button><button class="btn btns" onclick="editCo(${c.id})" title="Edit">✏️ Edit</button></div></td>
     </tr>`).join('')}</tbody>
   </table></div></div>`;
 }
@@ -2309,10 +2310,46 @@ function saveSup(){
   else{obj.id=nid(db.suppliers);db.suppliers.push(obj);}
   saveDB();closeM('supplier');toast('Supplier saved ✓');rSup();
 }
+function editCo(id){
+  const c=db.companies.find(x=>x.id===id);if(!c)return;
+  popSels();
+  document.getElementById('co-modal-title').textContent='Edit Company';
+  document.getElementById('co-save-btn').textContent='Save Changes';
+  document.getElementById('co-id').value=id;
+  document.getElementById('co-name').value=c.name||'';
+  document.getElementById('co-code').value=c.code||'';
+  document.getElementById('co-grp').value=c.group||'';
+  document.getElementById('co-roc').value=c.roc||'';
+  document.getElementById('co-tin').value=c.tin||'';
+  document.getElementById('co-sst').value=c.sst||'';
+  document.getElementById('co-msic').value=c.msic||'';
+  document.getElementById('co-business').value=c.business||'';
+  document.getElementById('co-address').value=c.address||'';
+  document.getElementById('co-email').value=c.email||'';
+  document.getElementById('co-phone').value=c.phone||'';
+  document.getElementById('co-color').value=c.color||COLORS[0];
+  // highlight selected color
+  setTimeout(()=>{
+    document.querySelectorAll('#co-colors div').forEach(d=>{d.style.border='2px solid transparent';});
+    const sel=document.getElementById('cc-'+(c.color||COLORS[0]).replace('#',''));
+    if(sel)sel.style.border='2px solid #1a1a18';
+  },50);
+  openM('company');
+}
 function saveCo(){
   const name=document.getElementById('co-name').value.trim();if(!name)return alert('Company name required');
-  db.companies.push({id:nid(db.companies),name,code:(document.getElementById('co-code').value||name.substring(0,3)).toUpperCase(),group:document.getElementById('co-grp').value,color:document.getElementById('co-color').value||COLORS[0],roc:document.getElementById('co-roc')?.value||'',tin:document.getElementById('co-tin')?.value||'',sst:document.getElementById('co-sst')?.value||'',address:document.getElementById('co-address')?.value||'',email:document.getElementById('co-email')?.value||'',phone:document.getElementById('co-phone')?.value||'',msic:document.getElementById('co-msic')?.value||'',business:document.getElementById('co-business')?.value||''});
-  saveDB();closeM('company');popSels();toast('Company added ✓');rCo();
+  const id=document.getElementById('co-id').value;
+  const obj={name,code:(document.getElementById('co-code').value||name.substring(0,3)).toUpperCase(),group:document.getElementById('co-grp').value,color:document.getElementById('co-color').value||COLORS[0],roc:document.getElementById('co-roc')?.value||'',tin:document.getElementById('co-tin')?.value||'',sst:document.getElementById('co-sst')?.value||'',address:document.getElementById('co-address')?.value||'',email:document.getElementById('co-email')?.value||'',phone:document.getElementById('co-phone')?.value||'',msic:document.getElementById('co-msic')?.value||'',business:document.getElementById('co-business')?.value||''};
+  if(id){
+    const c=db.companies.find(x=>x.id===parseInt(id));
+    if(c)Object.assign(c,obj);
+    toast('Company updated ✓');
+  } else {
+    obj.id=nid(db.companies);
+    db.companies.push(obj);
+    toast('Company added ✓');
+  }
+  saveDB();closeM('company');popSels();rCo();
 }
 function saveInstall(){
   const co=document.getElementById('im-co').value,name=document.getElementById('im-name').value.trim();
@@ -2356,10 +2393,21 @@ function openM(name){
     }
   }
   if(name==='payment'){popSels();const id=document.getElementById('pm-id').value;if(!id){document.getElementById('pm-title').textContent='New Payment Request';['pm-payee','pm-amt','pm-bkname','pm-bkacc','pm-bkacname','pm-grp','pm-desc'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';});document.getElementById('pm-dt').value=tday();document.getElementById('pm-st').value='pending';document.getElementById('sup-search-box').style.display='none';}}
-  if(['installment','utility','recurring','balance','company','supplier'].includes(name))popSels();
+  if(name==='company'){
+    popSels();
+    const coId=document.getElementById('co-id');
+    if(coId&&!coId.value){
+      // reset to Add mode
+      document.getElementById('co-modal-title').textContent='Add Company';
+      document.getElementById('co-save-btn').textContent='Add Company';
+      ['co-name','co-code','co-roc','co-tin','co-sst','co-msic','co-business','co-address','co-email','co-phone'].forEach(i=>{const e=document.getElementById(i);if(e)e.value='';});
+      document.getElementById('co-color').value=COLORS[0];
+    }
+  }
+  if(['installment','utility','recurring','balance','supplier'].includes(name))popSels();
   document.getElementById('mo-'+name).classList.add('open');
 }
-function closeM(name){document.getElementById('mo-'+name).classList.remove('open');if(name==='payment')document.getElementById('pm-id').value='';}
+function closeM(name){document.getElementById('mo-'+name).classList.remove('open');if(name==='payment')document.getElementById('pm-id').value='';if(name==='company'){const e=document.getElementById('co-id');if(e)e.value='';}}
 
 // Override date modal save for utilities
 const _origSaveResch=saveResch;
