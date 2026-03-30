@@ -6,7 +6,7 @@
   <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzFBNEY4MiIvPgogIDxyZWN0IHg9IjEwIiB5PSIxMyIgd2lkdGg9IjEyIiBoZWlnaHQ9IjkiIHJ4PSIxLjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHBhdGggZD0iTTEzIDEzdi0yYTEgMSAwIDAgMSAxLTFoNGExIDEgMCAwIDEgMSAxdjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGxpbmUgeDE9IjEwIiB5MT0iMTciIHgyPSIyMiIgeTI9IjE3IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4=">
   <meta name="theme-color" content="#1A4F82">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PayTrack</title>
+<title>PayTrack — Utopia Group</title>
 <style>
 :root{--bg:#f5f4f0;--surface:#fff;--s2:#f9f8f5;--bd:#e2e0d8;--bd2:#ccc9bc;--tx:#1a1a18;--tx2:#6b6a64;--tx3:#9b9a94;--acc:#1a1a18;--blue:#1a6fb5;--bluebg:#eef4fb;--green:#197a4a;--greenbg:#eaf4ee;--amber:#9a6200;--amberbg:#fdf5e0;--red:#b91c1c;--redbg:#fef2f2;--purple:#6b2fa0;--purplebg:#f5eefb;--teal:#0e7490;--tealbg:#f0fbfc;--r:8px;--rl:12px}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -117,7 +117,7 @@ tbody tr:hover td{background:var(--s2)}
 
 <div class="app">
 <aside class="sidebar">
-  <div class="logo"><div class="t">💼 PayTrack</div><div class="s">Multi-Company v4</div></div>
+  <div class="logo"><div class="t">💼 PayTrack</div><div class="s">Utopia Group</div></div>
 
   <div class="ns">
     <div class="nl">Overview</div>
@@ -602,15 +602,25 @@ tbody tr:hover td{background:var(--s2)}
 
 <!-- COMPANY -->
 <div class="mo" id="mo-company">
-  <div class="md" style="max-width:440px">
+  <div class="md">
     <div class="mh"><div class="mt">Add Company</div><button class="xb" onclick="closeM('company')">✕</button></div>
     <div class="mb">
-      <div class="fg"><label class="fl">Company Name <span class="req">*</span></label><input id="co-name" placeholder="Full company name e.g. ABC Sdn Bhd"></div>
-      <div class="fg"><label class="fl">Short Code (2–4 chars)</label><input id="co-code" placeholder="e.g. ABC" maxlength="4" style="text-transform:uppercase"></div>
-      <div class="fg"><label class="fl">Group / Holding</label><select id="co-grp"><option value="">None</option></select></div>
-      <div class="fg"><label class="fl">Color Label</label>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px" id="co-colors"></div>
-        <input type="hidden" id="co-color" value="#1a6fb5">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+        <div class="fg" style="grid-column:1/-1"><label class="fl">Company Name <span class="req">*</span></label><input id="co-name" placeholder="Full registered company name"></div>
+        <div class="fg"><label class="fl">Short Code (2–4 chars)</label><input id="co-code" placeholder="e.g. ABC" maxlength="4" style="text-transform:uppercase"></div>
+        <div class="fg"><label class="fl">Group / Holding</label><select id="co-grp"><option value="">None</option></select></div>
+        <div class="fg"><label class="fl">ROC / Registration No.</label><input id="co-roc" placeholder="e.g. 202001002394 (1358713-H)"></div>
+        <div class="fg"><label class="fl">TIN No.</label><input id="co-tin" placeholder="e.g. C 26324543080"></div>
+        <div class="fg"><label class="fl">SST No.</label><input id="co-sst" placeholder="Leave blank if not registered"></div>
+        <div class="fg"><label class="fl">MSIC Code</label><input id="co-msic" placeholder="e.g. 68101"></div>
+        <div class="fg" style="grid-column:1/-1"><label class="fl">Business Activity</label><input id="co-business" placeholder="Description of business"></div>
+        <div class="fg" style="grid-column:1/-1"><label class="fl">Registered Address</label><input id="co-address" placeholder="Full registered address"></div>
+        <div class="fg"><label class="fl">Email</label><input id="co-email" type="email" placeholder="finance@company.com"></div>
+        <div class="fg"><label class="fl">Phone</label><input id="co-phone" placeholder="03-xxxxxxxx"></div>
+        <div class="fg" style="grid-column:1/-1"><label class="fl">Color Label</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px" id="co-colors"></div>
+          <input type="hidden" id="co-color" value="#1a6fb5">
+        </div>
       </div>
     </div>
     <div class="mf"><button class="btn" onclick="closeM('company')">Cancel</button><button class="btn btnp" onclick="saveCo()">Add Company</button></div>
@@ -906,13 +916,14 @@ tbody tr:hover td{background:var(--s2)}
 // ======================================================
 // DB
 // ======================================================
+const UTOPIA_COMPANIES=[{"id": 1, "name": "UTOPIA HOLIDAY SDN BHD", "code": "UTOPIA", "group": "Utopia Group", "color": "#1a6fb5", "roc": "202001002394 (1358713-H)", "tin": "C 26324543080", "sst": "", "address": "S-U1-02 BISTARI CONDOMINIUM, JALAN 1/64D, OFF JALAN PUTRA, 50350 KUALA LUMPUR", "email": "finance.utopiacoliving@gmail.com", "phone": "03-27003224", "msic": "68101", "business": "RENTING AND OPERATING OF SELF OWNED RESIDENTIAL BUILDINGS"}, {"id": 2, "name": "SCAFFOLDING MALAYSIA SDN BHD", "code": "SMB", "group": "Utopia Group", "color": "#197a4a", "roc": "202001043449 (1399770-K)", "tin": "C 26550451010", "sst": "", "address": "NO.3, LOT 156 JLN JURUBINA U1/18, SEKSYEN U1, GLENMARIE HICOM INDUSTRIAL PARK, 40150 SHAH ALAM SELANGOR MALAYSIA", "email": "kerjayakayamas@gmail.com", "phone": "03-27003224", "msic": "43909", "business": "OTHER SPECIALIZED CONSTRUCTION ACTIVITIES"}, {"id": 3, "name": "KAK KENDURI SDN BHD", "code": "KAK KENDURI", "group": "Utopia Group", "color": "#9a6200", "roc": "202301014068 (1507990-A)", "tin": "C 57955655070", "sst": "", "address": "NO.3, LOT 156 JLN JURUBINA U1/18, SEKSYEN U1, GLENMARIE HICOM INDUSTRIAL PARK, 40150 SHAH ALAM SELANGOR MALAYSIA", "email": "finance.kewibawaanmakmur@gmail.com", "phone": "03-27003224", "msic": "56210", "business": "DEALING IN THE BUSINESS OF EVENT AND FOOD"}, {"id": 4, "name": "IBNU SINA CARE SDN. BHD.", "code": "ISCB", "group": "Utopia Group", "color": "#b91c1c", "roc": "202201038969 (1484666-H)", "tin": "C 29939362030", "sst": "", "address": "6, JALAN TUKANG 16/4, SEKSYEN 16, 40200 SHAH ALAM, SELANGOR", "email": "finance.ibnusinacare@gmail.com", "phone": "03-27003224", "msic": "47721", "business": "STORES SPECIALIZED IN RETAIL SALE OF PHARMACEUTICALS, MEDICAL AND ORTHOPAEDIC GOODS"}, {"id": 5, "name": "REV MOVE SDN. BHD", "code": "RMB", "group": "Utopia Group", "color": "#6b2fa0", "roc": "202201040742 (1486439-U)", "tin": "C 29950222080", "sst": "", "address": "S-U1-02 BISTARI CONDOMINIUM, JALAN 1/64D, OFF JALAN PUTRA, 50350 KUALA LUMPUR", "email": "finance.revmove@gmail.com", "phone": "03-27003224", "msic": "77302", "business": "RENTING AND OPERATIONAL LEASING OF LANDTRANSPORT EQUIPMENT (OTHER THAN MOTOR VEHICLES) WITHOUT DRIVERS"}, {"id": 6, "name": "REV MOVE UTARA SDN BHD", "code": "RMU", "group": "Utopia Group", "color": "#0e7490", "roc": "202401005991 (1551841-U)", "tin": "C 58533537000", "sst": "", "address": "S-U1-02 BISTARI CONDOMINIUM, JALAN 1/64D, OFF JALAN PUTRA, 50350 KUALA LUMPUR", "email": "finance.rmusb@gmail.com", "phone": "03-27003224", "msic": "77302", "business": "RENTING AND OPERATIONAL LEASING OF LANDTRANSPORT EQUIPMENT (OTHER THAN MOTOR VEHICLES) WITHOUT DRIVERS"}, {"id": 7, "name": "ENCIK BEKU AIRCOND SDN BHD", "code": "ENCIK BEKU", "group": "Utopia Group", "color": "#c05621", "roc": "202401015889 (1561739-D)", "tin": "C 58672808020", "sst": "", "address": "5, JALAN BUKIT BADUNG 26/4 SEKSYEN 26 40400 SHAH ALAM SELANGOR MALAYSIA", "email": "encikbeku.aircondmy@gmail.com", "phone": "03-27003224", "msic": "43225", "business": "INSTALLATION OF VENTILATION, REFRIGERATION OR AIRCONDITIONING EQUIPMENT AND DUCTS"}, {"id": 8, "name": "KONGLOMERASI UTOPIA SDN BHD", "code": "KUB", "group": "Utopia Group", "color": "#2563eb", "roc": "202201042802 (1488499-A)", "tin": "C 29964729030", "sst": "", "address": "S-U1-02 BISTARI CONDOMINIUM, JALAN 1/64D, OFF JALAN PUTRA, 50350 KUALA LUMPUR", "email": "finance.konglomerasi@gmail.com", "phone": "03-27003224", "msic": "64200", "business": "ACTIVITIES OF HOLDING COMPANIES"}, {"id": 9, "name": "ANJAKAN STRATEGIK BERHAD", "code": "ASB", "group": "Utopia Group", "color": "#7c3aed", "roc": "202301006060 (1499979-K)", "tin": "C 57811040070", "sst": "", "address": "A2-0-23 TAMAN OUG PARKLANE JALAN 1/152 TAMAN OUG PARKLANE, 58200 KUALA LUMPUR", "email": "finance.anjakanstrategikberhad@gmail.com", "phone": "03-27003224", "msic": "56290", "business": "DEALING IN FOOD AND BEVERAGES"}, {"id": 10, "name": "MIMPIAN ASTAKA SDN BHD", "code": "MASB", "group": "Utopia Group", "color": "#0f766e", "roc": "202301033940 (1527863-U)", "tin": "C 58225656090", "sst": "", "address": "27-G, JALAN 3/125D, DESA PETALING, 57100 KUALA LUMPUR, WILAYAH PERSEKUTUAN KUALA LUMPUR", "email": "finance.mimpianastaka@gmail.com", "phone": "03-27003224", "msic": "47222", "business": "RETAIL SALE OF TEA, COFFEE, SOFT DRINKS, MINERAL WATER AND OTHER BEVERAGES"}, {"id": 11, "name": "MEKAR BUDI SDN BHD", "code": "MBSB", "group": "Utopia Group", "color": "#065f46", "roc": "202301037525 (1531448-P)", "tin": "C 58280653040", "sst": "", "address": "51-G, JLN SS19/6, SS 19, 47500 SUBANG JAYA, SELANGOR", "email": "finance.mekarbudi@gmail.com", "phone": "03-27003224", "msic": "47222", "business": "RETAIL SALE OF TEA, COFFEE, SOFT DRINKS, MINERAL WATER AND OTHER BEVERAGES"}, {"id": 12, "name": "MUTIARA EMBUN SDN. BHD", "code": "MESB", "group": "Utopia Group", "color": "#be185d", "roc": "202301046239 (1540153-H)", "tin": "C 58391637060", "sst": "", "address": "NO. 33, BLOCK Q, JALAN PLUMBUM, U, SEKSYEN 7, 40000 SHAH ALAM, SELANGOR", "email": "finance.mutiaraembun@gmail.com", "phone": "03-27003224", "msic": "47222", "business": "RETAIL SALE OF TEA, COFFEE, SOFT DRINKS, MINERAL WATER AND OTHER BEVERAGES"}, {"id": 13, "name": "MENTARI FAJAR SDN BHD", "code": "MFSB", "group": "Utopia Group", "color": "#1a6fb5", "roc": "202401025412 (1571264-X)", "tin": "C 58802421100", "sst": "", "address": "113, JALAN SATU KRUBONG, KAMPUNG SUNGAI BADAU, 75260 KRUBONG, MELAKA", "email": "", "phone": "03-27003224", "msic": "47222", "business": "RETAIL SALE OF TEA, COFFEE, SOFT DRINKS, MINERAL WATER AND OTHER BEVERAGES"}, {"id": 14, "name": "COLD TRUCK MALAYSIA SDN BHD", "code": "CTM", "group": "Utopia Group", "color": "#197a4a", "roc": "202301022096 (1516019-K)", "tin": "C 58143167070", "sst": "W10-2501-32000124", "address": "5, JALAN BUKIT BADUNG 26/4 SEKSYEN 26 40400 SHAH ALAM SELANGOR MALAYSIA", "email": "finance.suriaedaran@gmail.com", "phone": "03-27003224", "msic": "52299", "business": "COLD TRUCK LOGISTIC, TRANSPORTATION & DISTIRBUTION"}, {"id": 15, "name": "PULSE PILATES SDN BHD", "code": "PULSE PILATES", "group": "Utopia Group", "color": "#9a6200", "roc": "202401023893 (1569742-U)", "tin": "C 58782689040", "sst": "", "address": "S-U1-02 BISTARI CONDOMINIUM, JALAN 1/64D, OFF JALAN PUTRA, 50350 KUALA LUMPUR", "email": "pilatesreformer.my@gmail.com", "phone": "03-27003224", "msic": "77219", "business": "RENTING AND LEASING OF OTHER SPORT EQUIPMENT"}, {"id": 16, "name": "MERRY ELDERLY CARE SDN BHD", "code": "MERRY", "group": "Utopia Group", "color": "#b91c1c", "roc": "202401021693 (1567542-D)", "tin": "C 58754950050", "sst": "", "address": "S-U1-02 BISTARI CONDOMINIUM, JALAN 1/64D, OFF JALAN PUTRA, 50350 KUALA LUMPUR", "email": "elderlycare.my@gmail.com", "phone": "03-27003224", "msic": "87300", "business": "RESIDENTIAL CARE ACTIVITIES FOR THE ELDERLY AND DISABLED"}, {"id": 17, "name": "BUTIK GLAM & LUX SDN BHD", "code": "BUTIK GLAM", "group": "Utopia Group", "color": "#6b2fa0", "roc": "202401006531 (1552381-P)", "tin": "C 58545953030", "sst": "", "address": "10, JLN PERUSAHAAN AMARI, KAWASAN INDUSTRI BATU CAVES, 68100 BATU CAVES SELANGOR MALAYSIA", "email": "finance.butikglam@gmail.com", "phone": "03-27003224", "msic": "47820", "business": "RETAIL SALE OF TEXTILE, CLOTHING & FOOTWEAR VIA STALLS OR MARKET"}, {"id": 18, "name": "CIK CUCI CLEANING SDN BHD", "code": "CIK CUCI", "group": "Utopia Group", "color": "#0e7490", "roc": "202401043276 (1589122-D)", "tin": "C 59642994000", "sst": "", "address": "S-U1-02 BISTARI CONDOMINIUM, JALAN 1/64D, OFF JALAN PUTRA, 50350 KUALA LUMPUR", "email": "cikcuci.cleaningservice@gmail.com", "phone": "03-27003224", "msic": "96099", "business": "DEALING IN DOMESTIC CLEANER AND MAID SERVICES"}, {"id": 19, "name": "MANDIRI MED BERHAD", "code": "MANDIRI MED", "group": "Utopia Group", "color": "#c05621", "roc": "202301014066 (1507988-P)", "tin": "C 57955653000", "sst": "", "address": "NO. 33, JALAN ANGGERIK 1, TAMAN PAYA RUMPUT PERDANA, 76450, MELAKA.", "email": "finance.mandirimed@gmail.com", "phone": "03-27003224", "msic": "10722", "business": "MANUFACTURE OF PALM SUGAR PRODUCTS"}, {"id": 20, "name": "MOBILE WHEELER SDN BHD", "code": "MOBILE WHEELER", "group": "Utopia Group", "color": "#2563eb", "roc": "202401020960 (1566809-V)", "tin": "C 58743971080", "sst": "", "address": "S-U1-02 BISTARI CONDOMINIUM, JALAN 1/64D, OFF JALAN PUTRA, 50350 KUALA LUMPUR", "email": "yumtruckmy@gmail.com", "phone": "03-27003224", "msic": "77102", "business": "RENTING AND OPERATIONAL LEASING OF TRUCKS, UTILITY TRAILERS AND RECREATIONAL VEHICLES"}, {"id": 21, "name": "REV BIKE SDN BHD", "code": "RBB", "group": "Utopia Group", "color": "#7c3aed", "roc": "202001043728 (1400050-D)", "tin": "C 26553100040", "sst": "", "address": "NO. 3, LOT 156 JLN JURUBINA U1/18 ,SEKSYEN U1 ,GLENMARIE HICOM INDUSTRIAL PARK ,SHAH ALAM ,SELANGOR", "email": "finance.revbikeberhad@gmail.com", "phone": "03-27003224", "msic": "45201", "business": "SERVICES, MAINTENANCE & REPAIR OF MOTORCYCLES"}, {"id": 22, "name": "ENCIK BEKU AIRCOND SELATAN SDN. BHD.", "code": "ENCIK BEKU SELATAN", "group": "Utopia Group", "color": "#0f766e", "roc": "202501010352 (1611766-A)", "tin": "C 59942941000", "sst": "", "address": "5, JALAN BUKIT BADUNG 26/4 SEKSYEN 26 40400 SHAH ALAM SELANGOR MALAYSIA", "email": "encikbekuselatan.aircondmy@gmail.com", "phone": "03-27003224", "msic": "43225", "business": "INSTALLATION OF VENTILATION, REFRIGERATION OR AIRCONDITIONING EQUIPMENT AND DUCTS"}, {"id": 23, "name": "ENCIK BEKU AIRCOND N9 SDN. BHD.", "code": "ENCIK BEKU N9", "group": "Utopia Group", "color": "#065f46", "roc": "202501010573 (1611987-U)", "tin": "C 59947252090", "sst": "", "address": "5, JALAN BUKIT BADUNG 26/4 SEKSYEN 26 40400 SHAH ALAM SELANGOR MALAYSIA", "email": "encikbekun9.aircondmy@gmail.com", "phone": "03-27003224", "msic": "43225", "business": "INSTALLATION OF VENTILATION, REFRIGERATION OR AIRCONDITIONING EQUIPMENT AND DUCTS"}, {"id": 24, "name": "ENCIK SKYLIFT & CRANE SDN. BHD.", "code": "ENCIK SKYLIFT", "group": "Utopia Group", "color": "#be185d", "roc": "202501011344 (1612758-H)", "tin": "C 59956257090", "sst": "", "address": "NO.3, LOT 156 JLN JURUBINA U1/18, SEKSYEN U1, GLENMARIE HICOM INDUSTRIAL PARK, 40150 SHAH ALAM SELANGOR MALAYSIA", "email": "encikskyliftcrane@gmail.com", "phone": "03-27003224", "msic": "43907", "business": "RENTING OF CONSTRUCTION MACHINERY AND EQUIPMENT WITH OPERATOR (E.G. CRANES)"}, {"id": 25, "name": "JOM VEND SDN BHD", "code": "JOM VEND", "group": "Utopia Group", "color": "#1a6fb5", "roc": "202401043422 (1589268-M)", "tin": "C 59645362000", "sst": "", "address": "S-U1-02 BISTARI CONDOMINIUM, JALAN 1/64D, OFF JALAN PUTRA, 50350 KUALA LUMPUR", "email": "finance.delimadedikasi@gmail.com", "phone": "03-27003224", "msic": "46909", "business": "EXPORT AND IMPORT OF A VARIETY OF GOODS WITHOUT ANY PARTICULAR SPECIALIZATION N.E.C"}, {"id": 26, "name": "MEGAH DINAMIK SDN BHD", "code": "MDSB", "group": "Utopia Group", "color": "#197a4a", "roc": "202301046240 (1540154-T)", "tin": "C 58391638040", "sst": "", "address": "S-U1-02 BISTARI CONDOMINIUM, JALAN 1/64D, OFF JALAN PUTRA, 50350 KUALA LUMPUR", "email": "finance.megahdinamik@gmail.com", "phone": "03-27003224", "msic": "47222", "business": "RETAIL SALE OF TEA, COFFEE, SOFT DRINKS, MINERAL WATER AND OTHER BEVERAGES"}, {"id": 27, "name": "BERKAT BUMANTARA SDN BHD", "code": "BBB", "group": "Utopia Group", "color": "#9a6200", "roc": "202201047798 (1493495-H)", "tin": "C 29996919030", "sst": "", "address": "S-U1-02 BISTARI CONDOMINIUM, JALAN 1/64D, OFF JALAN PUTRA, 50350 KUALA LUMPUR", "email": "finance.berkatbumantara@gmail.com", "phone": "03-27003224", "msic": "56102", "business": "CAFETERIAS/CANTEENS"}, {"id": 28, "name": "UTOPIA ACCELERATOR SDN BHD", "code": "UTOPIA ACCELERATOR", "group": "Utopia Group", "color": "#b91c1c", "roc": "202401045780 (1591626-K)", "tin": "C 59690549010", "sst": "", "address": "S-U1-02 BISTARI CONDOMINIUM, JALAN 1/64D, OFF JALAN PUTRA, 50350 KUALA LUMPUR", "email": "finance.utopiacoliving@gmail.com", "phone": "03-27003224", "msic": "47999", "business": "OTHER RETAIL SALE NOT IN STORES, STALLS OR MARKETS N.E.C"}];
 const COLORS=['#1a6fb5','#197a4a','#9a6200','#b91c1c','#6b2fa0','#0e7490','#c05621','#2563eb','#7c3aed','#0f766e','#065f46','#be185d'];
 const DEF_CATS=['Supplier/Vendor','Utilities','Salary/Payroll','Loan/Installment','Rental','Tax/Government','Insurance','Intercompany','Other'];
 let db={companies:[],payments:[],suppliers:[],installments:[],utilities:[],recurring:[],balances:[],categories:[...DEF_CATS],groups:[],agingInvoices:[],payrollRuns:[],staffAdvances:[],statutory:[],pettyCash:[]};
 
 function loadDB(){
   try{const s=localStorage.getItem('paytrack4');if(s)db=JSON.parse(s);}catch(e){}
-  // migrate from v2
+  // migrate from older versions
   if(!db.agingInvoices){try{const s2=localStorage.getItem('paytrack2');if(s2){const old=JSON.parse(s2);Object.assign(db,{companies:old.companies||[],payments:old.payments||[],suppliers:old.suppliers||[],installments:old.installments||[],utilities:old.utilities||[],recurring:old.recurring||[],balances:old.balances||[],categories:old.categories||[...DEF_CATS],groups:old.groups||[]});}}catch(e){}}
   if(!db.categories||db.categories.length===0)db.categories=[...DEF_CATS];
   if(!db.groups)db.groups=[];
@@ -922,7 +933,16 @@ function loadDB(){
   if(!db.staffAdvances)db.staffAdvances=[];
   if(!db.statutory)db.statutory=[];
   if(!db.pettyCash)db.pettyCash=[];
-
+  // Always sync Utopia companies — upsert by code, clear old demo data
+  const demoCodes=new Set(['ABC','XYZ','DEF','GHI','JKL']);
+  db.companies=db.companies.filter(c=>!demoCodes.has(c.code));
+  UTOPIA_COMPANIES.forEach(uc=>{
+    const idx=db.companies.findIndex(c=>c.code===uc.code);
+    if(idx>=0){db.companies[idx]=Object.assign({},db.companies[idx],uc);}
+    else{db.companies.push({...uc});}
+  });
+  db.groups=['Utopia Group'];
+  saveDB();
 }
 function saveDB(){localStorage.setItem('paytrack4',JSON.stringify(db));document.getElementById('save-info').textContent='Saved '+new Date().toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'});}
 
@@ -1239,20 +1259,146 @@ function rCo(){
     const pmts=db.payments.filter(p=>p.company===c.name);
     const pend=pmts.filter(p=>p.status!=='paid');const ov=pmts.filter(p=>isOv(p));
     const bal=db.balances.find(b=>b.company===c.name);
-    return`<div class="card cp">
+    return`<div class="card cp" style="position:relative">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
-        <div style="width:34px;height:34px;border-radius:8px;background:${c.color};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px">${(c.code||c.name.substring(0,2)).toUpperCase()}</div>
-        <div><div style="font-weight:600;font-size:14px">${c.name}</div><div style="font-size:11px;color:var(--tx3)">${c.group||'No group'}</div></div>
+        <div style="width:40px;height:40px;border-radius:10px;background:${c.color};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;flex-shrink:0">${(c.code||c.name.substring(0,2)).toUpperCase()}</div>
+        <div style="min-width:0">
+          <div style="font-weight:600;font-size:13px;line-height:1.3">${c.name}</div>
+          <div style="font-size:10px;color:var(--tx3);margin-top:1px">${c.roc||c.group||''}</div>
+        </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px">
-        <div style="background:var(--s2);padding:6px 8px;border-radius:6px"><div style="color:var(--tx3)">Pending</div><div style="font-weight:600">${pend.length} · ${fmtA(pend.reduce((a,p)=>a+Number(p.amount),0))}</div></div>
-        <div style="background:${ov.length?'var(--redbg)':'var(--s2)'};padding:6px 8px;border-radius:6px"><div style="color:var(--tx3)">Overdue</div><div style="font-weight:600;color:${ov.length?'var(--red)':'inherit'}">${ov.length}</div></div>
-        <div style="background:var(--s2);padding:6px 8px;border-radius:6px;grid-column:1/-1"><div style="color:var(--tx3)">Bank Balance</div><div style="font-weight:600">${bal?fmtA(bal.balance):'Not set'}</div></div>
+      <div style="font-size:11px;color:var(--tx2);margin-bottom:9px;line-height:1.5">
+        ${c.business?`<div style="margin-bottom:3px">📋 ${c.business}</div>`:''}
+        ${c.address?`<div style="color:var(--tx3)">📍 ${c.address.substring(0,60)}${c.address.length>60?'…':''}</div>`:''}
+        ${c.email?`<div style="color:var(--tx3)">✉ ${c.email}</div>`:''}
       </div>
-      <button class="btn btns btnd" style="margin-top:10px" onclick="delCo(${c.id})">Remove</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:11px;margin-bottom:10px">
+        <div style="background:var(--s2);padding:5px 7px;border-radius:5px"><div style="color:var(--tx3)">Pending</div><div style="font-weight:600">${pend.length} · ${fmtA(pend.reduce((a,p)=>a+Number(p.amount),0))}</div></div>
+        <div style="background:${ov.length?'var(--redbg)':'var(--s2)'};padding:5px 7px;border-radius:5px"><div style="color:var(--tx3)">Overdue</div><div style="font-weight:600;color:${ov.length?'var(--red)':'inherit'}">${ov.length}</div></div>
+        ${c.tin?`<div style="background:var(--s2);padding:5px 7px;border-radius:5px"><div style="color:var(--tx3)">TIN</div><div style="font-weight:500;font-size:10px">${c.tin}</div></div>`:''}
+        ${c.msic?`<div style="background:var(--s2);padding:5px 7px;border-radius:5px"><div style="color:var(--tx3)">MSIC</div><div style="font-weight:500">${c.msic}</div></div>`:''}
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btns" onclick="printCompanyProfile(${c.id})" style="flex:1">🖨️ Profile PDF</button>
+        <button class="btn btns btnd" onclick="delCo(${c.id})">Remove</button>
+      </div>
     </div>`;}).join('')||'<div class="empty" style="grid-column:1/-1">No companies. Click + Add Company.</div>';
 }
 function delCo(id){if(!confirm('Remove company?'))return;db.companies=db.companies.filter(x=>x.id!==id);saveDB();popSels();rCo();}
+
+function printCompanyProfile(id){
+  const c=db.companies.find(x=>x.id===id);if(!c)return;
+  const pmts=db.payments.filter(p=>p.company===c.name);
+  const pend=pmts.filter(p=>p.status!=='paid'&&!isOv(p));
+  const ov=pmts.filter(p=>isOv(p));
+  const paid=pmts.filter(p=>p.status==='paid');
+  const bal=db.balances.find(b=>b.company===c.name);
+  const aging=db.agingInvoices.filter(i=>i.company===c.name&&i.status!=='settled');
+  const agingBal=aging.reduce((a,i)=>a+Math.max(0,Number(i.invoiceAmt)-Number(i.paidAmt||0)),0);
+  const payroll=db.payrollRuns.filter(r=>r.company===c.name).sort((a,b)=>b.period.localeCompare(a.period));
+  const lastPayroll=payroll[0];
+
+  const row=(label,val,bold=false)=>val?`<tr><td style="width:38%;padding:7px 12px;color:#666;font-size:12px;border-bottom:1px solid #f0efeb;font-weight:500">${label}</td><td style="padding:7px 12px;font-size:12px;border-bottom:1px solid #f0efeb;${bold?'font-weight:600;color:#1a1a18':'color:#333'}">${val}</td></tr>`:'' ;
+
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Company Profile — ${c.name}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;color:#1a1a18;background:#fff;padding:32px 36px;max-width:750px;margin:0 auto}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:18px;border-bottom:3px solid #1A4F82;margin-bottom:22px}
+.logo-box{width:56px;height:56px;border-radius:12px;background:${c.color};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;flex-shrink:0}
+.co-name{font-size:20px;font-weight:700;letter-spacing:-.3px;margin-bottom:3px}
+.co-sub{font-size:11px;color:#888;letter-spacing:.3px}
+.section{margin-bottom:20px}
+.sec-title{font-size:10px;font-weight:700;color:#1A4F82;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #e8e0d4}
+table{width:100%;border-collapse:collapse}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.met{background:#f6f2ec;border-radius:8px;padding:11px 13px}
+.met-lbl{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.met-val{font-size:18px;font-weight:700;letter-spacing:-.5px}
+.met-val.red{color:#b91c1c}.met-val.green{color:#197a4a}.met-val.blue{color:#1A4F82}
+.sst-badge{display:inline-block;background:#d1fae5;color:#065f46;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;margin-left:8px}
+.no-sst{display:inline-block;background:#f3f4f6;color:#9ca3af;font-size:10px;padding:2px 8px;border-radius:20px;margin-left:8px}
+.footer{margin-top:24px;font-size:10px;color:#bbb;text-align:center;padding-top:12px;border-top:1px solid #f0efeb}
+.print-btn{text-align:center;margin-top:20px}
+.print-btn button{padding:10px 28px;background:#1A4F82;color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit}
+@media print{.print-btn{display:none}body{padding:18px 22px}}
+</style></head>
+<body>
+<div class="hdr">
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="logo-box">${(c.code||c.name.substring(0,2)).toUpperCase()}</div>
+    <div>
+      <div class="co-name">${c.name}</div>
+      <div class="co-sub">${c.group||'Utopia Group'} &nbsp;·&nbsp; ${c.code}</div>
+      ${c.business?`<div style="font-size:11px;color:#555;margin-top:4px;max-width:420px">${c.business}</div>`:''}
+    </div>
+  </div>
+  <div style="text-align:right">
+    <div style="font-size:10px;color:#aaa;letter-spacing:.3px">COMPANY PROFILE</div>
+    <div style="font-size:11px;color:#666;margin-top:3px">Generated: ${new Date().toLocaleDateString('en-MY',{day:'2-digit',month:'long',year:'numeric'})}</div>
+    <div style="font-size:10px;color:#aaa;margin-top:2px;font-family:monospace">PT-${Date.now().toString().slice(-8)}</div>
+  </div>
+</div>
+
+<div class="metrics">
+  <div class="met"><div class="met-lbl">Pending Payments</div><div class="met-val blue">${pend.length}</div><div style="font-size:10px;color:#888;margin-top:2px">${fmtA(pend.reduce((a,p)=>a+Number(p.amount),0))}</div></div>
+  <div class="met"><div class="met-lbl">Overdue</div><div class="met-val ${ov.length?'red':'green'}">${ov.length}</div><div style="font-size:10px;color:#888;margin-top:2px">${fmtA(ov.reduce((a,p)=>a+Number(p.amount),0))}</div></div>
+  <div class="met"><div class="met-lbl">Bank Balance</div><div class="met-val ${bal?'green':''}">  ${bal?fmtA(bal.balance):'—'}</div><div style="font-size:10px;color:#888;margin-top:2px">${bal?bal.bank:'Not set'}</div></div>
+  <div class="met"><div class="met-lbl">AP Outstanding</div><div class="met-val ${agingBal>0?'red':''}">${agingBal>0?fmtA(agingBal):'—'}</div><div style="font-size:10px;color:#888;margin-top:2px">${aging.length} invoice(s)</div></div>
+</div>
+
+<div class="section">
+  <div class="sec-title">Company Registration Details</div>
+  <table>
+    ${row('Company Name',c.name,true)}
+    ${row('Company Code',c.code)}
+    ${row('ROC / Registration No.',c.roc)}
+    ${row('Tax Identification No. (TIN)',c.tin)}
+    ${row('SST Registration No.',c.sst||'<span style="color:#9ca3af">Not Registered</span>')}
+    ${row('MSIC Code',c.msic)}
+    ${row('Business Activity',c.business)}
+    ${row('Group / Holding',c.group||'Utopia Group')}
+  </table>
+</div>
+
+<div class="section">
+  <div class="sec-title">Contact & Address</div>
+  <table>
+    ${row('Registered Address',c.address)}
+    ${row('Email',c.email)}
+    ${row('Phone',c.phone)}
+  </table>
+</div>
+
+${pmts.length>0?`<div class="section">
+  <div class="sec-title">Payment Summary</div>
+  <table>
+    ${row('Total Payments (all time)',pmts.length+' records')}
+    ${row('Total Paid',fmtA(paid.reduce((a,p)=>a+Number(p.amount),0)),true)}
+    ${row('Pending',pend.length+' · '+fmtA(pend.reduce((a,p)=>a+Number(p.amount),0)))}
+    ${row('Overdue',ov.length>0?'<span style="color:#b91c1c;font-weight:600">'+ov.length+' · '+fmtA(ov.reduce((a,p)=>a+Number(p.amount),0))+'</span>':'None')}
+    ${lastPayroll?row('Last Payroll Run',lastPayroll.period+' · Gross: '+fmtA(lastPayroll.grossPay)+' · '+lastPayroll.headcount+' staff'):''}
+  </table>
+</div>`:''}
+
+${pend.length>0?`<div class="section">
+  <div class="sec-title">Pending Payments (${pend.length})</div>
+  <table>
+    <thead><tr style="background:#f6f2ec"><th style="padding:6px 12px;font-size:10px;font-weight:600;color:#888;text-align:left;text-transform:uppercase;letter-spacing:.4px">Payee</th><th style="padding:6px 12px;font-size:10px;font-weight:600;color:#888;text-align:left;text-transform:uppercase;letter-spacing:.4px">Category</th><th style="padding:6px 12px;font-size:10px;font-weight:600;color:#888;text-align:right;text-transform:uppercase;letter-spacing:.4px">Amount</th><th style="padding:6px 12px;font-size:10px;font-weight:600;color:#888;text-align:left;text-transform:uppercase;letter-spacing:.4px">Due Date</th></tr></thead>
+    <tbody>${pend.slice(0,10).map(p=>`<tr><td style="padding:6px 12px;font-size:12px;border-bottom:1px solid #f5f5f5">${p.payee}</td><td style="padding:6px 12px;font-size:11px;color:#666;border-bottom:1px solid #f5f5f5">${p.cat}</td><td style="padding:6px 12px;font-size:12px;font-weight:600;text-align:right;border-bottom:1px solid #f5f5f5">${fmtA(p.amount)}</td><td style="padding:6px 12px;font-size:11px;color:${isOv(p)?'#b91c1c':'#333'};border-bottom:1px solid #f5f5f5">${fmtD(p.date)}</td></tr>`).join('')}${pend.length>10?`<tr><td colspan="4" style="padding:6px 12px;font-size:11px;color:#888;text-align:center">... and ${pend.length-10} more payments</td></tr>`:''}</tbody>
+  </table>
+</div>`:''}
+
+<div class="footer">Utopia Group · PayTrack System · This is a system-generated company profile · ${new Date().toLocaleString('en-MY')}</div>
+<div class="print-btn"><button onclick="window.print()">🖨️ Print / Save as PDF</button></div>
+<script>setTimeout(()=>window.print(),400);<\/script>
+</body></html>`;
+
+  const w=window.open('','_blank');
+  if(!w){alert('Pop-up blocked — please allow pop-ups and try again.');return;}
+  w.document.write(html);w.document.close();
+  toast('Company profile opened ✓');
+}
 
 // ======================================================
 // INSTALLMENTS
@@ -2246,7 +2392,7 @@ function saveSup(){
 }
 function saveCo(){
   const name=document.getElementById('co-name').value.trim();if(!name)return alert('Company name required');
-  db.companies.push({id:nid(db.companies),name,code:(document.getElementById('co-code').value||name.substring(0,3)).toUpperCase(),group:document.getElementById('co-grp').value,color:document.getElementById('co-color').value||COLORS[0]});
+  db.companies.push({id:nid(db.companies),name,code:(document.getElementById('co-code').value||name.substring(0,3)).toUpperCase(),group:document.getElementById('co-grp').value,color:document.getElementById('co-color').value||COLORS[0],roc:document.getElementById('co-roc')?.value||'',tin:document.getElementById('co-tin')?.value||'',sst:document.getElementById('co-sst')?.value||'',address:document.getElementById('co-address')?.value||'',email:document.getElementById('co-email')?.value||'',phone:document.getElementById('co-phone')?.value||'',msic:document.getElementById('co-msic')?.value||'',business:document.getElementById('co-business')?.value||''});
   saveDB();closeM('company');popSels();toast('Company added ✓');rCo();
 }
 function saveInstall(){
