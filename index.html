@@ -142,6 +142,9 @@ tbody tr:hover td{background:var(--s2)}
 
   <div class="ns">
     <div class="nl">Trackers</div>
+    <div class="ni" onclick="nav('mastertracker',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Master Tracker
+    </div>
     <div class="ni" onclick="nav('installment',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Installments
       <span class="nbadge" id="nb-install" style="display:none">0</span>
@@ -153,6 +156,10 @@ tbody tr:hover td{background:var(--s2)}
     <div class="ni" onclick="nav('recurring',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>Auto-Debit / Recurring
       <span class="nbadge" id="nb-rec" style="display:none">0</span>
+    </div>
+    <div class="ni" onclick="nav('rental',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Rental / Tenancy
+      <span class="nbadge" id="nb-rental" style="display:none">0</span>
     </div>
   </div>
 
@@ -283,6 +290,79 @@ tbody tr:hover td{background:var(--s2)}
       <span style="font-size:11px;color:var(--tx3)" id="co-count"></span>
     </div>
     <div id="co-cards"></div>
+  </div>
+
+  <!-- MASTER TRACKER -->
+  <div id="page-mastertracker" class="page">
+    <div class="infobox">📤 <b>AI Document Extractor</b> — Upload any PDF, image or file. Claude AI will read it, identify the type, and auto-save the details into the correct tracker (Installment, Utility, Auto-Debit or Rental).</div>
+
+    <!-- Upload Zone -->
+    <div class="card cp sg">
+      <div class="ct" style="margin-bottom:12px">Upload Document</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+        <div class="fg"><label class="fl">Company <span class="req">*</span></label><select id="mt-co" style="font-size:12px"><option value="">Select company...</option></select></div>
+        <div class="fg"><label class="fl">Document Type (optional — AI will detect)</label>
+          <select id="mt-type" style="font-size:12px">
+            <option value="auto">Auto-detect</option>
+            <option value="installment">Loan / HP Agreement</option>
+            <option value="utility">Utility Bill</option>
+            <option value="recurring">Auto-Debit / Subscription</option>
+            <option value="rental">Rental / Tenancy Agreement</option>
+          </select>
+        </div>
+      </div>
+      <div id="mt-dropzone" class="attach-zone" style="padding:28px;font-size:13px"
+        onclick="document.getElementById('mt-file').click()"
+        ondragover="event.preventDefault();this.classList.add('has-file')"
+        ondragleave="this.classList.remove('has-file')"
+        ondrop="handleMTDrop(event)">
+        <div style="font-size:28px;margin-bottom:8px">📄</div>
+        <div><b>Click to upload</b> or drag & drop here</div>
+        <div style="font-size:11px;margin-top:4px;color:var(--tx3)">PDF, JPG, PNG, Excel, CSV — max 5MB</div>
+      </div>
+      <input type="file" id="mt-file" accept=".pdf,.jpg,.jpeg,.png,.xlsx,.csv" style="display:none" onchange="handleMTFile(this)">
+      <div id="mt-file-preview" style="display:none;margin-top:10px"></div>
+      <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+        <button class="btn btnp" id="mt-extract-btn" onclick="extractDocument()" style="display:none">🤖 Extract & Auto-Save</button>
+        <div id="mt-status" style="font-size:12px;color:var(--tx2)"></div>
+      </div>
+    </div>
+
+    <!-- Extraction Log -->
+    <div class="card sg">
+      <div class="ch"><span class="ct">📋 Extraction History</span><span id="mt-log-count" class="badge bb">0</span></div>
+      <div id="mt-log-list">
+        <div class="empty">No extractions yet. Upload a document above to get started.</div>
+      </div>
+    </div>
+
+    <!-- Master Summary Table -->
+    <div class="card">
+      <div class="ch"><span class="ct">📊 All Trackers Summary</span></div>
+      <div class="tw"><table>
+        <thead><tr><th>Type</th><th>Company</th><th>Name / Description</th><th>Amount (RM)</th><th>Frequency</th><th>Next Due</th><th>Status</th><th>Go To</th></tr></thead>
+        <tbody id="mt-summary"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- RENTAL / TENANCY -->
+  <div id="page-rental" class="page">
+    <div class="infobox">🏠 Track all rental agreements — office, warehouse, retail space. Click <b>Pay Rent</b> to log payment and advance next due date.</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      <select id="fr2-co" onchange="rRental()" style="width:200px;font-size:12px"><option value="">All Companies</option></select>
+      <select id="fr2-st" onchange="rRental()" style="width:140px;font-size:12px"><option value="">All Status</option><option value="active">Active</option><option value="expired">Expired</option></select>
+      <button class="btn btnp btns" onclick="openM('rental')">+ Add Rental</button>
+    </div>
+    <div class="g3" style="margin-bottom:14px">
+      <div class="met"><div class="ml">Monthly Rent (total)</div><div class="mv" id="ren-total">RM 0</div></div>
+      <div class="met"><div class="ml" style="color:var(--red)">Due / Overdue</div><div class="mv" id="ren-due" style="color:var(--red)">0</div></div>
+      <div class="met"><div class="ml">Active Agreements</div><div class="mv" id="ren-active">0</div></div>
+    </div>
+    <div class="card"><div class="tw"><table>
+      <thead><tr><th>Company</th><th>Property / Description</th><th>Landlord</th><th>Monthly Rent</th><th>Start Date</th><th>End Date</th><th>Next Due</th><th>Bank</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="rentalT"></tbody>
+    </table></div></div>
   </div>
 
   <!-- INSTALLMENTS -->
@@ -701,6 +781,29 @@ tbody tr:hover td{background:var(--s2)}
   </div>
 </div>
 
+<!-- RENTAL -->
+<div class="mo" id="mo-rental"><div class="md"><div class="mh"><div class="mt" id="ren-title">Add Rental Agreement</div><button class="xb" onclick="closeM('rental')">✕</button></div><div class="mb"><input type="hidden" id="ren-id"><div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+  <div class="fg"><label class="fl">Company <span class="req">*</span></label><select id="ren-co"></select></div>
+  <div class="fg"><label class="fl">Property / Description <span class="req">*</span></label><input id="ren-name" placeholder="e.g. Office Unit 3A, Wisma XYZ"></div>
+  <div class="fg"><label class="fl">Landlord Name <span class="req">*</span></label><input id="ren-landlord" placeholder="Full name / company"></div>
+  <div class="fg"><label class="fl">Landlord Bank</label><input id="ren-bank" placeholder="e.g. Maybank"></div>
+  <div class="fg"><label class="fl">Bank Account No.</label><input id="ren-acc" placeholder="Account number"></div>
+  <div class="fg"><label class="fl">Account Name</label><input id="ren-accname" placeholder="As registered with bank"></div>
+  <div class="fg"><label class="fl">Monthly Rent (RM) <span class="req">*</span></label><input id="ren-amount" type="number" step="0.01"></div>
+  <div class="fg"><label class="fl">Deposit (RM)</label><input id="ren-deposit" type="number" step="0.01" value="0"></div>
+  <div class="fg"><label class="fl">Agreement Start Date</label><input id="ren-start" type="date"></div>
+  <div class="fg"><label class="fl">Agreement End Date</label><input id="ren-end" type="date"></div>
+  <div class="fg"><label class="fl">Next Due Date <span class="req">*</span></label><input id="ren-next" type="date"></div>
+  <div class="fg"><label class="fl">Status</label><select id="ren-status"><option value="active">Active</option><option value="expired">Expired</option></select></div>
+  <div class="fg span2"><label class="fl">Address / Notes</label><input id="ren-notes" placeholder="Full property address, notes..."></div>
+  <div class="fg span2"><label class="fl">📎 Attach Tenancy Agreement</label>
+    <div class="attach-zone" id="ren-drop" onclick="document.getElementById('ren-file').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event,'ren')">Click to upload or drag & drop — PDF, JPG, PNG (max 2MB)</div>
+    <input type="file" id="ren-file" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFile(this,'ren')">
+    <div id="ren-attach-preview"></div>
+    <input type="hidden" id="ren-attach-data"><input type="hidden" id="ren-attach-name"><input type="hidden" id="ren-attach-type">
+  </div>
+</div></div><div class="mf"><button class="btn" onclick="closeM('rental')">Cancel</button><button class="btn btnp" onclick="saveRental()">Save</button></div></div></div>
+
 <!-- BALANCE -->
 <div class="mo" id="mo-balance">
   <div class="md" style="max-width:460px">
@@ -938,6 +1041,8 @@ function loadDB(){
   if(!db.staffAdvances)db.staffAdvances=[];
   if(!db.statutory)db.statutory=[];
   if(!db.pettyCash)db.pettyCash=[];
+  if(!db.rentals)db.rentals=[];
+  if(!db.extractionLog)db.extractionLog=[];
   // Always sync Utopia companies — upsert by code, clear old demo data
   const demoCodes=new Set(['ABC','XYZ','DEF','GHI','JKL']);
   db.companies=db.companies.filter(c=>!demoCodes.has(c.code));
@@ -989,13 +1094,15 @@ function updateBadges(){
   // Aging overdue badge
   const agOv=(db.agingInvoices||[]).filter(i=>i.status!=='settled'&&i.dueDate<today&&(Number(i.invoiceAmt)-Number(i.paidAmt||0))>0).length;
   const nag=document.getElementById('nb-aging');if(nag){nag.style.display=agOv?'':'none';nag.textContent=agOv;}
+  const renOv=(db.rentals||[]).filter(r=>r.status==='active'&&r.nextDate<=today).length;
+  const nren=document.getElementById('nb-rental');if(nren){nren.style.display=renOv?'':'none';nren.textContent=renOv;}
 }
 
 // ======================================================
 // POPULATE SELECTS
 // ======================================================
 function popSels(){
-  const coIds=['fp-co','pm-co','bm-co','im-co','um-co','rm-co','fi-co','fu-co','fr-co','fb-co','cf-co','ex-co','ag-co','fag-co','pr-co','sa-co','fsa-co','stt-co','fst-co','pc-co','fpc-co'];
+  const coIds=['fp-co','pm-co','bm-co','im-co','um-co','rm-co','fi-co','fu-co','fr-co','fb-co','cf-co','ex-co','ag-co','fag-co','pr-co','sa-co','fsa-co','stt-co','fst-co','pc-co','fpc-co','ren-co','fr2-co','mt-co'];
   coIds.forEach(id=>{
     const el=document.getElementById(id);if(!el)return;
     const cur=el.value;
@@ -1032,7 +1139,7 @@ function selColor(c){document.getElementById('co-color').value=c;document.queryS
 // ======================================================
 // NAVIGATION
 // ======================================================
-const pTitles={dashboard:'Dashboard',payments:'Payment Requests',suppliers:'Suppliers & Payees',companies:'Companies',installment:'Installment Tracker',utilities:'Utilities Tracker',recurring:'Auto-Debit & Recurring',aging:'Supplier Aging',payroll:'Payroll',staffadvance:'Staff Advance',statutory:'Statutory Contributions',pettycash:'Petty Cash & Claims',banks:'Bank Balances',cashflow:'Cash Flow Summary',export:'Export Center',settings:'Settings'};
+const pTitles={dashboard:'Dashboard',payments:'Payment Requests',suppliers:'Suppliers & Payees',companies:'Companies',mastertracker:'Master Tracker',installment:'Installment Tracker',utilities:'Utilities Tracker',recurring:'Auto-Debit & Recurring',rental:'Rental / Tenancy',aging:'Supplier Aging',payroll:'Payroll',staffadvance:'Staff Advance',statutory:'Statutory Contributions',pettycash:'Petty Cash & Claims',banks:'Bank Balances',cashflow:'Cash Flow Summary',export:'Export Center',settings:'Settings'};
 
 function nav(page,el){
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
@@ -1047,6 +1154,8 @@ function nav(page,el){
   if(page==='payments')rPay();
   if(page==='suppliers')rSup();
   if(page==='companies')rCo();
+  if(page==='mastertracker'){popSels();rMasterTracker();}
+  if(page==='rental')rRental();
   if(page==='installment')rInstall();
   if(page==='utilities')rUtil();
   if(page==='recurring')rRec();
@@ -1616,6 +1725,7 @@ function rSettings(){
     `<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bd);font-size:13px">
       <span>${g}</span><button class="btn btns btnd" onclick="delGrp(${i})">Remove</button>
     </div>`).join('')||'<div style="font-size:13px;color:var(--tx3);padding:6px 0">No custom groups yet</div>';
+  calcStorage();
 }
 function addCat(){const v=document.getElementById('new-cat').value.trim();if(!v)return;if(db.categories.includes(v))return toast('Category already exists');db.categories.push(v);saveDB();popSels();rSettings();document.getElementById('new-cat').value='';toast('Category added ✓');}
 function delCat(i){if(!confirm('Remove category?'))return;db.categories.splice(i,1);saveDB();popSels();rSettings();}
@@ -2283,11 +2393,6 @@ function calcStorage(){
 // SETTINGS (patch rSettings to call calcStorage)
 // ======================================================
 const _origRSettings=rSettings;
-function rSettings(){
-  _origRSettings();
-  calcStorage();
-}
-
 // ======================================================
 // SAVE MODALS (v4)
 // ======================================================
@@ -2431,12 +2536,245 @@ function toast(msg){const el=document.getElementById('toast');el.textContent=msg
 // ======================================================
 // INIT
 // ======================================================
-loadDB();popSels();updateBadges();
+// ======================================================
+// RENTAL / TENANCY
+// ======================================================
+function rRental(){
+  const co=document.getElementById('fr2-co')?.value||'';
+  const st=document.getElementById('fr2-st')?.value||'';
+  const data=(db.rentals||[]).filter(r=>(!co||r.company===co)&&(!st||r.status===st));
+  const today=tday();
+  const active=db.rentals.filter(r=>r.status==='active');
+  const due=active.filter(r=>r.nextDate<=today);
+  const totalRent=active.reduce((a,r)=>a+Number(r.amount),0);
+  document.getElementById('ren-total').textContent=fmtA(totalRent);
+  document.getElementById('ren-due').textContent=due.length;
+  document.getElementById('ren-active').textContent=active.length;
+  document.getElementById('rentalT').innerHTML=data.sort((a,b)=>a.nextDate.localeCompare(b.nextDate)).map(r=>{
+    const ov=r.nextDate<today&&r.status==='active';
+    const due=r.nextDate===today&&r.status==='active';
+    return`<tr class="${ov?'ro':due?'rt':''}">
+      <td><span class="dot" style="background:${coC(r.company)}"></span>${coK(r.company)}</td>
+      <td style="font-weight:500">${r.name}<div style="font-size:10px;color:var(--tx3)">${r.notes||''}</div></td>
+      <td style="font-size:12px">${r.landlord}</td>
+      <td class="am">${fmtA(r.amount)}</td>
+      <td style="font-size:11px;color:var(--tx3)">${r.start?fmtD(r.start):'—'}</td>
+      <td style="font-size:11px;color:var(--tx3)">${r.end?fmtD(r.end):'—'}</td>
+      <td style="font-weight:500;color:${ov?'var(--red)':'inherit'}">${fmtD(r.nextDate)}</td>
+      <td style="font-size:11px;color:var(--tx3)">${r.bank||''} ${r.acc?'···'+r.acc.slice(-4):''}</td>
+      <td>${r.status==='active'?`<span class="badge bg">Active</span>`:`<span class="badge br">Expired</span>`}</td>
+      <td style="display:flex;gap:4px;flex-wrap:nowrap">
+        ${r.status==='active'?`<button class="btn btns btnok" onclick="payRental(${r.id})">Pay Rent</button>`:''}
+        <button class="btn btns" onclick="editRental(${r.id})">Edit</button>
+        ${r.attach?`<button class="btn btns" onclick="viewAttach(db.rentals.find(x=>x.id===${r.id}).attach)" title="View agreement">📎</button>`:''}
+      </td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="10" class="empty">No rental agreements added yet.</td></tr>';
+}
+function saveRental(){
+  const co=document.getElementById('ren-co').value,name=document.getElementById('ren-name').value.trim(),landlord=document.getElementById('ren-landlord').value.trim(),amount=document.getElementById('ren-amount').value,next=document.getElementById('ren-next').value;
+  if(!co||!name||!landlord||!amount||!next)return alert('Company, Property, Landlord, Amount and Next Due Date are required');
+  const id=document.getElementById('ren-id').value;
+  const attach=gatherAttach('ren');
+  const obj={company:co,name,landlord,bank:document.getElementById('ren-bank').value,acc:document.getElementById('ren-acc').value,accname:document.getElementById('ren-accname').value,amount:Number(amount),deposit:Number(document.getElementById('ren-deposit').value)||0,start:document.getElementById('ren-start').value,end:document.getElementById('ren-end').value,nextDate:next,status:document.getElementById('ren-status').value,notes:document.getElementById('ren-notes').value,attach};
+  if(id){const r=db.rentals.find(x=>x.id===parseInt(id));if(r)Object.assign(r,obj);}
+  else{obj.id=nid(db.rentals);db.rentals.push(obj);}
+  saveDB();closeM('rental');toast('Rental saved ✓');rRental();updateBadges();
+}
+function editRental(id){
+  const r=db.rentals.find(x=>x.id===id);if(!r)return;
+  popSels();document.getElementById('ren-title').textContent='Edit Rental';document.getElementById('ren-id').value=id;
+  document.getElementById('ren-co').value=r.company;document.getElementById('ren-name').value=r.name;
+  document.getElementById('ren-landlord').value=r.landlord;document.getElementById('ren-bank').value=r.bank||'';
+  document.getElementById('ren-acc').value=r.acc||'';document.getElementById('ren-accname').value=r.accname||'';
+  document.getElementById('ren-amount').value=r.amount;document.getElementById('ren-deposit').value=r.deposit||0;
+  document.getElementById('ren-start').value=r.start||'';document.getElementById('ren-end').value=r.end||'';
+  document.getElementById('ren-next').value=r.nextDate;document.getElementById('ren-status').value=r.status||'active';
+  document.getElementById('ren-notes').value=r.notes||'';loadAttachPreview('ren',r.attach);openM('rental');
+}
+function payRental(id){
+  const r=db.rentals.find(x=>x.id===id);if(!r)return;
+  const d=new Date(r.nextDate+'T00:00:00');d.setMonth(d.getMonth()+1);r.nextDate=d.toISOString().split('T')[0];
+  db.payments.push({id:nid(db.payments),company:r.company,payee:r.landlord,cat:'Rental',group:'Rental',amount:r.amount,date:tday(),bankName:r.bank||'',bankAcc:r.acc||'',bankAccName:r.accname||'',status:'paid',desc:`Rent — ${r.name}`});
+  saveDB();toast('Rent payment recorded ✓');rRental();updateBadges();
+}
+
+// ======================================================
+// MASTER TRACKER
+// ======================================================
+let mtFileData=null;let mtFileName='';let mtFileType='';
+
+function handleMTDrop(e){
+  e.preventDefault();document.getElementById('mt-dropzone').classList.remove('has-file');
+  const file=e.dataTransfer.files[0];if(file)processMTFile(file);
+}
+function handleMTFile(input){const file=input.files[0];if(file)processMTFile(file);}
+function processMTFile(file){
+  if(file.size>5*1024*1024){toast('File too large — max 5MB');return;}
+  mtFileName=file.name;mtFileType=file.type;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    mtFileData=e.target.result;
+    const zone=document.getElementById('mt-dropzone');
+    zone.classList.add('has-file');
+    zone.innerHTML=`<div style="font-size:20px">✓</div><div style="font-weight:600;margin-top:4px">${file.name}</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">${(file.size/1024).toFixed(0)} KB</div>`;
+    document.getElementById('mt-extract-btn').style.display='inline-flex';
+    document.getElementById('mt-status').textContent='Ready to extract';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function extractDocument(){
+  const co=document.getElementById('mt-co').value;
+  if(!co){alert('Please select a company first');return;}
+  if(!mtFileData){alert('Please upload a file first');return;}
+  const docType=document.getElementById('mt-type').value;
+  const btn=document.getElementById('mt-extract-btn');
+  const status=document.getElementById('mt-status');
+  btn.disabled=true;btn.textContent='🤖 Extracting...';status.textContent='Sending to AI...';
+
+  try{
+    // Build message based on file type
+    const isImage=mtFileType.startsWith('image/');
+    const isPDF=mtFileType==='application/pdf';
+    const base64=mtFileData.split(',')[1];
+
+    const systemPrompt=`You are a document data extractor for a Malaysian financial management system. Extract structured data from documents and respond ONLY with a valid JSON object. No explanation, no markdown, just the JSON.
+
+Detect document type and extract accordingly:
+- Loan/HP Agreement: {"type":"installment","name":"","lender":"","loanno":"","monthly":0,"total":0,"paid":0,"nextDate":"YYYY-MM-DD","bank":"","cat":"Loan/Installment"}
+- Utility Bill: {"type":"utility","name":"","utilityType":"Electricity (TNB)|Water|Gas|Internet|Phone Line","acc":"","avg":0,"nextDate":"YYYY-MM-DD","bank":"","lastAmt":0}
+- Auto-Debit/Subscription: {"type":"recurring","payee":"","cat":"","amount":0,"freq":"Monthly|Quarterly|Yearly","nextDate":"YYYY-MM-DD","bank":"","desc":""}
+- Rental/Tenancy: {"type":"rental","name":"","landlord":"","bank":"","acc":"","accname":"","amount":0,"deposit":0,"start":"YYYY-MM-DD","end":"YYYY-MM-DD","nextDate":"YYYY-MM-DD","notes":""}
+
+${docType!=='auto'?`The user says this is a "${docType}" document — prioritize that type.`:'Auto-detect the document type.'}
+
+Use Malaysian date formats. Return amount in RM numbers only (no currency symbol). If a field cannot be determined, use empty string or 0.`;
+
+    let userContent;
+    if(isImage){
+      userContent=[{type:'image',source:{type:'base64',media_type:mtFileType,data:base64}},{type:'text',text:'Extract all relevant data from this document.'}];
+    } else if(isPDF){
+      userContent=[{type:'document',source:{type:'base64',media_type:'application/pdf',data:base64}},{type:'text',text:'Extract all relevant data from this document.'}];
+    } else {
+      userContent=[{type:'text',text:`File: ${mtFileName}\nContent appears to be a spreadsheet or CSV. Extract the most relevant financial commitment data (loan, utility, subscription or rental).`}];
+    }
+
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:systemPrompt,messages:[{role:'user',content:userContent}]})
+    });
+    const data=await resp.json();
+    const text=data.content?.find(c=>c.type==='text')?.text||'';
+    const clean=text.replace(/```json|```/g,'').trim();
+    const extracted=JSON.parse(clean);
+
+    status.textContent='Saving to tracker...';
+    extracted.company=co;
+    const result=autoSaveExtracted(extracted,co);
+    if(result.ok){
+      // Log it
+      if(!db.extractionLog)db.extractionLog=[];
+      db.extractionLog.unshift({id:nid(db.extractionLog||[{id:0}]),date:tday(),file:mtFileName,type:extracted.type,company:co,summary:result.summary,data:extracted});
+      saveDB();
+      status.innerHTML=`<span style="color:var(--green)">✓ ${result.summary}</span>`;
+      // Reset
+      setTimeout(()=>{
+        mtFileData=null;mtFileName='';mtFileType='';
+        document.getElementById('mt-dropzone').classList.remove('has-file');
+        document.getElementById('mt-dropzone').innerHTML='<div style="font-size:28px;margin-bottom:8px">📄</div><div><b>Click to upload</b> or drag & drop here</div><div style="font-size:11px;margin-top:4px;color:var(--tx3)">PDF, JPG, PNG, Excel, CSV — max 5MB</div>';
+        document.getElementById('mt-file').value='';
+        document.getElementById('mt-extract-btn').style.display='none';
+        rMasterTracker();
+      },1500);
+    } else {
+      status.innerHTML=`<span style="color:var(--red)">✗ ${result.error}</span>`;
+    }
+  } catch(err){
+    console.error(err);
+    status.innerHTML=`<span style="color:var(--red)">✗ Error: ${err.message}</span>`;
+  }
+  btn.disabled=false;btn.textContent='🤖 Extract & Auto-Save';
+}
+
+function autoSaveExtracted(d,company){
+  try{
+    if(d.type==='installment'){
+      db.installments.push({id:nid(db.installments),company,name:d.name||'Untitled Loan',lender:d.lender||'',loanno:d.loanno||'',monthly:Number(d.monthly)||0,total:Number(d.total)||1,paid:Number(d.paid)||0,nextDate:d.nextDate||tday(),bank:d.bank||'',cat:d.cat||'Loan/Installment'});
+      return{ok:true,summary:`Loan/HP "${d.name||d.lender}" saved to Installment Tracker`};
+    }
+    if(d.type==='utility'){
+      db.utilities.push({id:nid(db.utilities),company,name:d.name||d.utilityType||'Utility',type:d.utilityType||'Other Utility',acc:d.acc||'',avg:Number(d.avg)||0,nextDate:d.nextDate||tday(),bank:d.bank||'',lastAmt:Number(d.lastAmt)||0,history:[]});
+      return{ok:true,summary:`Utility "${d.name||d.acc}" saved to Utilities Tracker`};
+    }
+    if(d.type==='recurring'){
+      db.recurring.push({id:nid(db.recurring),company,payee:d.payee||'Unknown',cat:d.cat||'Other',amount:Number(d.amount)||0,freq:d.freq||'Monthly',nextDate:d.nextDate||tday(),bank:d.bank||'',desc:d.desc||'',lastPaid:null});
+      return{ok:true,summary:`Auto-debit "${d.payee}" saved to Recurring Tracker`};
+    }
+    if(d.type==='rental'){
+      db.rentals.push({id:nid(db.rentals),company,name:d.name||'Rental Property',landlord:d.landlord||'',bank:d.bank||'',acc:d.acc||'',accname:d.accname||'',amount:Number(d.amount)||0,deposit:Number(d.deposit)||0,start:d.start||'',end:d.end||'',nextDate:d.nextDate||tday(),status:'active',notes:d.notes||''});
+      return{ok:true,summary:`Rental "${d.name||d.landlord}" saved to Rental Tracker`};
+    }
+    return{ok:false,error:'Unknown document type detected'};
+  } catch(e){return{ok:false,error:e.message};}
+}
+
+function rMasterTracker(){
+  popSels();
+  // Render extraction log
+  const log=db.extractionLog||[];
+  document.getElementById('mt-log-count').textContent=log.length;
+  document.getElementById('mt-log-list').innerHTML=log.slice(0,20).map(l=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:0.5px solid var(--bd);font-size:12px">
+      <div style="width:34px;height:34px;border-radius:8px;background:${l.type==='installment'?'var(--bluebg)':l.type==='utility'?'var(--greenbg)':l.type==='rental'?'var(--amberbg)':'var(--purplebg)'};display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">${l.type==='installment'?'📌':l.type==='utility'?'⚡':l.type==='rental'?'🏠':'🔄'}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:500">${l.summary}</div>
+        <div style="color:var(--tx3);font-size:10px;margin-top:1px">${fmtD(l.date)} · ${l.file} · <span class="dot" style="background:${coC(l.company)}"></span>${l.company}</div>
+      </div>
+      <span class="badge ${l.type==='installment'?'bb':l.type==='utility'?'bg':l.type==='rental'?'ba':'bp'}">${l.type}</span>
+    </div>`).join('')||'<div class="empty">No extractions yet.</div>';
+
+  // Master summary table — all trackers
+  const today=tday();
+  const rows=[];
+  (db.installments||[]).forEach(i=>{
+    const due=i.nextDate<=today&&i.paid<i.total;
+    rows.push({type:'Installment',icon:'📌',company:i.company,name:i.name+(i.lender?` — ${i.lender}`:''),amount:i.monthly,freq:'Monthly',next:i.nextDate,ov:i.nextDate<today&&i.paid<i.total,page:'installment'});
+  });
+  (db.utilities||[]).forEach(u=>{
+    rows.push({type:'Utility',icon:'⚡',company:u.company,name:u.name,amount:u.avg,freq:'Monthly',next:u.nextDate,ov:u.nextDate<today,page:'utilities'});
+  });
+  (db.recurring||[]).forEach(r=>{
+    rows.push({type:'Auto-Debit',icon:'🔄',company:r.company,name:r.payee,amount:r.amount,freq:r.freq,next:r.nextDate,ov:r.nextDate<today,page:'recurring'});
+  });
+  (db.rentals||[]).forEach(r=>{
+    rows.push({type:'Rental',icon:'🏠',company:r.company,name:r.name+(r.landlord?` — ${r.landlord}`:''),amount:r.amount,freq:'Monthly',next:r.nextDate,ov:r.nextDate<today&&r.status==='active',page:'rental'});
+  });
+  rows.sort((a,b)=>a.next.localeCompare(b.next));
+  document.getElementById('mt-summary').innerHTML=rows.map(r=>`<tr class="${r.ov?'ro':''}">
+    <td><span class="badge ${r.type==='Installment'?'bb':r.type==='Utility'?'bg':r.type==='Rental'?'ba':'bp'}">${r.icon} ${r.type}</span></td>
+    <td><span class="dot" style="background:${coC(r.company)}"></span>${coK(r.company)}</td>
+    <td style="font-weight:500">${r.name}</td>
+    <td class="am">${fmtA(r.amount)}</td>
+    <td style="font-size:11px;color:var(--tx3)">${r.freq}</td>
+    <td style="color:${r.ov?'var(--red)':'inherit'};font-weight:${r.ov?'600':'400'}">${fmtD(r.next)}</td>
+    <td>${r.ov?'<span class="badge br">Due/Overdue</span>':'<span class="badge bg">On Track</span>'}</td>
+    <td><button class="btn btns" onclick="nav('${r.page}',null)">→ Go</button></td>
+  </tr>`).join('')||'<tr><td colspan="8" class="empty">No trackers set up yet.</td></tr>';
+}
+
+// ======================================================
 document.getElementById('todayLabel').textContent=new Date().toLocaleDateString('en-MY',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
 document.getElementById('save-info').textContent='Data saved locally';
 rDash();
 
 // Close modals on overlay click
+document.querySelectorAll('.mo').forEach(mo=>{mo.addEventListener('click',e=>{if(e.target===mo)mo.classList.remove('open');});});
+loadDB();popSels();updateBadges();
+document.getElementById('todayLabel').textContent=new Date().toLocaleDateString('en-MY',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+document.getElementById('save-info').textContent='Data saved locally';
+rDash();
 document.querySelectorAll('.mo').forEach(mo=>{mo.addEventListener('click',e=>{if(e.target===mo)mo.classList.remove('open');});});
 </script>
 </body>
