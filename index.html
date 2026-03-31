@@ -1053,7 +1053,7 @@ function loadDB(){
   });
   db.groups=['Utopia Group'];
   saveDB();
-}
+
   // Seed Utopia recurring tracker data (one-time import)
   if(!db.utopiaTrackerSeeded){
     const addWithIds=(arr,existing,newItems)=>{
@@ -1066,6 +1066,7 @@ function loadDB(){
     db.utopiaTrackerSeeded=true;
     saveDB();
   }
+}
 function saveDB(){localStorage.setItem('paytrack4',JSON.stringify(db));document.getElementById('save-info').textContent='Saved '+new Date().toLocaleTimeString('en-MY',{hour:'2-digit',minute:'2-digit'});}
 
 function seed(){}
